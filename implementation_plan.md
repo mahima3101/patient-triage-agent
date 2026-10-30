@@ -26,22 +26,20 @@ The implementation strictly decouples:
 - [x] **Task 1.3: Created `data/homecare_protocols.json`**
   - Evidence-based clinical home-care protocols with ICD-10 and SNOMED concept codes, non-pharmacological directives, OTC guidance, and critical red-flag escalation triggers.
 
-### Phase 2: Clinical Tool Suite Development (`tools/`)
-- [ ] **Task 2.1: `tools/symptom_parser.py` (`SymptomMedicalParser`)**
-  - Maps natural language complaints to standardized clinical terms.
-  - Flags vital signs or red-flag symptom markers (e.g., crushing chest pain, dyspnea, focal weakness).
-- [ ] **Task 2.2: `tools/drug_interaction.py` (`DrugInteractionChecker`)**
-  - Reads `interactions.json` and `drug_interactions_drugbank.csv` from `AGENTX_DATA_DIR` (fallback to `./data`).
-  - Supports fuzzy matching for generic and brand names (e.g., Advil -> Ibuprofen, Coumadin -> Warfarin).
-  - Returns highest interaction severity, clinical rationale, and alternative medications.
-- [ ] **Task 2.3: `tools/protocol_search.py` (`HomeCareProtocolSearch`)**
-  - Searches local `homecare_protocols.json` by condition keyword.
-  - Incorporates web search tool fallback if local protocol is unavailable.
-  - Safety check: Disallows home-care if major drug contraindications or red-flag symptoms are present.
-- [ ] **Task 2.4: `tools/urgency_classifier.py` (`UrgencyClassifier`)**
-  - Algorithmic urgency scoring mapping combined factors into **Green**, **Yellow**, or **Red**.
-- [ ] **Task 2.5: Register Tools in `tools/__init__.py`**
-  - Integrate new tools into `build_tools()`, exposing clean documentation and argument schemas to the agent.
+### Phase 2: Clinical Tool Suite Development (`tools/`) — [COMPLETED]
+- [x] **Task 2.1: `tools/symptom_parser.py` (`SymptomMedicalParser`)**
+  - Standardizes colloquial patient complaints into formal clinical nomenclature (SNOMED-CT / ICD-10).
+  - Flags critical red-flag emergency symptoms (crushing chest pain, focal weakness, thunderclap cephalea, melena).
+- [x] **Task 2.2: `tools/drug_interaction.py` (`DrugInteractionChecker`)**
+  - Cross-references input medications against `interactions.json` and 222,697 DrugBank interaction pairs in `DDI_data.csv`.
+  - Supports brand name aliases and symptom contraindications; sub-second lookup performance.
+- [x] **Task 2.3: `tools/protocol_search.py` (`HomeCareProtocolSearch`)**
+  - Searches verified supportive home-care protocols from `homecare_protocols.json`.
+  - Enforces clinical safety boundaries: withholds home-care if major contraindications or red flags are present.
+- [x] **Task 2.4: `tools/urgency_classifier.py` (`UrgencyClassifier`)**
+  - Stratifies acuity into validated 3-tier clinical rating: GREEN, YELLOW, or RED with clinical rationale and action plan.
+- [x] **Task 2.5: Registered in `tools/__init__.py` & Verified with Unit Tests (`tests/test_medical_tools.py`)**
+  - 9 automated unit tests verifying parsing, contraindication flagging, safety blocking, and urgency classification.
 
 ### Phase 3: Agent Brain & Prompt Engineering (`agent/`)
 - [ ] **Task 3.1: Specialize `agent/prompt_builder.py`**

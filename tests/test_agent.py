@@ -1,8 +1,11 @@
 """Offline tests (no API key). Run: python -m unittest discover tests"""
 import json
+import os
 import subprocess
 import sys
 import unittest
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from agent.core import AgentExecutor, parse_json
 from tools import build_tools
@@ -44,7 +47,9 @@ class AgentTests(unittest.TestCase):
         self.assertEqual(t["calculator"].execute(expression="2+2*10"), 22)
 
     def test_cli_contract(self):
-        out = subprocess.run([sys.executable, "main.py", "--json", "--dry-run", "hi"], capture_output=True, text=True)
+        script_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        main_py = os.path.join(script_dir, "main.py")
+        out = subprocess.run([sys.executable, main_py, "--json", "--dry-run", "hi"], cwd=script_dir, capture_output=True, text=True)
         d = json.loads(out.stdout.strip().splitlines()[-1])
         self.assertTrue(d["answer"] and len(d["trace"]) >= 2)
 

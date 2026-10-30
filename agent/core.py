@@ -1,6 +1,7 @@
 """The ReAct loop: Thought -> Action -> Observation -> Decision. Returns answer + trace."""
 import json
 import re
+import sys
 
 import config
 from agent.prompt_builder import build_system_prompt
@@ -51,7 +52,7 @@ class AgentExecutor:
                 continue
             if "final_answer" in data:
                 if verbose:
-                    print(f"[Thought] {thought}\n[Final] {data['final_answer']}")
+                    print(f"[Thought] {thought}\n[Final] {data['final_answer']}", flush=True)
                 return str(data["final_answer"]), trace
             name, args = data.get("action"), data.get("args") or {}
             key = (name, json.dumps(args, sort_keys=True, default=str))
@@ -59,7 +60,7 @@ class AgentExecutor:
             observation = self._call_tool(name, args)
             trace.append({"thought": thought, "tool": name, "args": args, "observation": observation[:2000]})
             if verbose:
-                print(f"[Thought] {thought}\n[Action] {name}({args})\n[Observation] {observation[:300]}")
+                print(f"[Thought] {thought}\n[Action] {name}({args})\n[Observation] {observation[:300]}\n", flush=True)
             messages += [{"role": "assistant", "content": json.dumps(data)},
                          {"role": "user", "content": f"OBSERVATION: {observation}"}]
         return self._wrap_up(messages), trace

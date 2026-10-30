@@ -4,6 +4,7 @@ Includes an intelligent DryRunLLM for offline evaluation and judge test harnesse
 import json
 import os
 import re
+import sys
 import time
 
 import config
@@ -23,7 +24,7 @@ class LLM:
             self.client = Groq(api_key=os.environ["GROQ_API_KEY"])
 
     def generate(self, system, messages):
-        """messages: list of {"role": "user"|"assistant", "content": str}. Returns text. Retries on 429."""
+        """messages: list of {"role": "user"|"assistant", "content": str}. Returns text. Retries on 429/503."""
         for attempt in range(4):
             try:
                 return self._call(system, messages)
@@ -31,9 +32,12 @@ class LLM:
                 converted = self._native_tool_call_as_json(e)
                 if converted:
                     return converted
-                # rate limit: back off and retry, otherwise surface the error
-                if attempt < 3 and ("429" in str(e) or "rate" in str(e).lower() or "quota" in str(e).lower()):
-                    time.sleep(2 * 2 ** attempt)
+                # rate limit or transient service spike: back off and retry
+                err_str = str(e).lower()
+                if attempt < 3 and any(w in err_str for w in ["429", "503", "rate", "quota", "demand", "unavailable", "timeout"]):
+                    wait_time = 2 * (attempt + 1)
+                    print(f"[LLM] Service busy/unavailable ({e}). Retrying in {wait_time}s...", file=sys.stderr, flush=True)
+                    time.sleep(wait_time)
                     continue
                 raise
 

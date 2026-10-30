@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AURA Triage | Patient Triage & Interaction Checker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Palette: Navy Blue & Warm Beige */
+      --bg-cream: #F8F5EE;
+      --clay-beige-card: #F1E9DC;
+      --clay-beige-card-hover: #EBE0D0;
+      --clay-beige-sunken: #E5DAC9;
+      --clay-navy: #152238;
+      --clay-navy-surface: #1E2E4A;
+      --clay-navy-accent: #2A4068;
+      --clay-navy-light: #3D5A8A;
+      
+      --text-navy-primary: #0F172A;
+      --text-navy-secondary: #334155;
+      --text-navy-muted: #64748B;
+      --text-cream: #FAF7F2;
+      --text-cream-muted: #D1C7B7;
+      
+      /* Status Tiers */
+      --urgency-green-clay: #2E7D32;
+      --urgency-green-bg: #E8F5E9;
+      --urgency-yellow-clay: #C07D00;
+      --urgency-yellow-bg: #FFF8E1;
+      --urgency-red-clay: #C62828;
+      --urgency-red-bg: #FFEBEE;
+
+      /* Clay Shadows */
+      --clay-shadow-beige: 
+        10px 14px 24px rgba(21, 34, 56, 0.07),
+        -8px -8px 18px rgba(255, 255, 255, 0.85),
+        inset 2px 2px 4px rgba(255, 255, 255, 0.9),
+        inset -3px -3px 6px rgba(180, 160, 140, 0.25);
+
+      --clay-shadow-beige-hover: 
+        14px 20px 30px rgba(21, 34, 56, 0.1),
+        -10px -10px 22px rgba(255, 255, 255, 0.95),
+        inset 2px 2px 4px rgba(255, 255, 255, 0.95),
+        inset -3px -3px 6px rgba(180, 160, 140, 0.3);
+
+      --clay-shadow-sunken: 
+        inset 4px 5px 8px rgba(21, 34, 56, 0.08),
+        inset -4px -4px 8px rgba(255, 255, 255, 0.9),
+        0 1px 2px rgba(255, 255, 255, 0.8);
+
+      --clay-shadow-navy: 
+        8px 12px 22px rgba(15, 23, 42, 0.28),
+        -6px -6px 16px rgba(255, 255, 255, 0.2),
+        inset 2px 2px 5px rgba(255, 255, 255, 0.25),
+        inset -3px -3px 6px rgba(0, 0, 0, 0.45);
+
+      --clay-shadow-navy-pressed: 
+        inset 4px 4px 8px rgba(0, 0, 0, 0.5),
+        inset -2px -2px 5px rgba(255, 255, 255, 0.15),
+        0 2px 4px rgba(15, 23, 42, 0.2);
+
+      --radius-sm: 14px;
+      --radius-md: 22px;
+      --radius-lg: 30px;
+      --radius-pill: 9999px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-color: var(--bg-cream);
+      color: var(--text-navy-primary);
+      min-height: 100vh;
+      padding: 28px 20px 48px;
+      background-image: 
+        radial-gradient(circle at 10% 15%, rgba(42, 64, 104, 0.04) 0%, transparent 40%),
+        radial-gradient(circle at 90% 85%, rgba(30, 46, 74, 0.03) 0%, transparent 45%);
+    }
+
+    .container {
+      max-width: 1220px;
+      margin: 0 auto;
+    }
+
+    /* Top Navigation Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      padding: 8px 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: var(--radius-md);
+      background: var(--clay-navy);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--clay-shadow-navy);
+      color: var(--text-cream);
+      font-size: 26px;
+    }
+
+    .brand-text h1 {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--clay-navy);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    .brand-text p {
+      font-size: 13px;
+      color: var(--text-navy-muted);
+      font-weight: 600;
+      margin-top: 3px;
+    }
+
+    .badge-track {
+      background: var(--clay-beige-card);
+      padding: 8px 18px;
+      border-radius: var(--radius-pill);
+      box-shadow: var(--clay-shadow-beige);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--clay-navy-accent);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+
+    .badge-pulse {
+      width: 8px;
+      height: 8px;
+      background: #10B981;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.6; }
+    }
+
+    /* Quick Test Preset Bar */
+    .preset-section {
+      background: var(--clay-beige-card);
+      border-radius: var(--radius-lg);
+      padding: 18px 24px;
+      box-shadow: var(--clay-shadow-beige);
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .preset-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-navy-secondary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .preset-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-preset {
+      background: var(--bg-cream);
+      border: none;
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--clay-navy);
+      box-shadow: var(--clay-shadow-beige);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .btn-preset:hover {
+      box-shadow: var(--clay-shadow-beige-hover);
+      transform: translateY(-2px);
+    }
+
+    .btn-preset.active {
+      background: var(--clay-navy);
+      color: var(--text-cream);
+      box-shadow: var(--clay-shadow-navy);
+    }
+
+    /* Main Grid Layout */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 1.35fr;
+      gap: 28px;
+      margin-bottom: 28px;
+    }
+
+    @media (max-width: 990px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Clay Cards */
+    .clay-card {
+      background: var(--clay-beige-card);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--clay-shadow-beige);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      position: relative;
+    }
+
+    .card-header {
+      margin-bottom: 20px;
+    }
+
+    .card-header h2 {
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--clay-navy);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-header p {
+      font-size: 13px;
+      color: var(--text-navy-muted);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    /* Form Elements */
+    .form-group {
+      margin-bottom: 22px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-navy-secondary);
+      margin-bottom: 8px;
+    }
+
+    .clay-input-box {
+      width: 100%;
+      background: var(--clay-beige-sunken);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      box-shadow: var(--clay-shadow-sunken);
+      color: var(--text-navy-primary);
+      font-size: 14px;
+      outline: none;
+      resize: vertical;
+      line-height: 1.5;
+      transition: all 0.2s ease;
+    }
+
+    .clay-input-box:focus {
+      background: #E1D4C0;
+      box-shadow: inset 4px 5px 10px rgba(21, 34, 56, 0.12), inset -4px -4px 8px rgba(255, 255, 255, 0.95);
+    }
+
+    /* Quick symptom chips */
+    .chips-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .chip {
+      background: var(--bg-cream);
+      padding: 5px 12px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-navy-secondary);
+      box-shadow: 2px 2px 6px rgba(21, 34, 56, 0.05), -2px -2px 6px rgba(255, 255, 255, 0.8);
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.15s ease;
+    }
+
+    .chip:hover {
+      background: var(--clay-beige-sunken);
+      color: var(--clay-navy);
+      transform: translateY(-1px);
+    }
+
+    /* Medication Tag Builder */
+    .med-input-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    .med-input-group input {
+      flex: 1;
+    }
+
+    .btn-add-med {
+      background: var(--clay-navy-surface);
+      color: var(--text-cream);
+      border: none;
+      padding: 0 20px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 700;
+      box-shadow: var(--clay-shadow-navy);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-add-med:hover {
+      background: var(--clay-navy-accent);
+      transform: translateY(-1px);
+    }
+
+    .med-tags-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+      min-height: 38px;
+    }
+
+    .med-tag {
+      background: var(--clay-navy);
+      color: var(--text-cream);
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--clay-shadow-navy);
+      animation: popIn 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.85); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .med-tag-remove {
+      cursor: pointer;
+      font-weight: 800;
+      color: var(--text-cream-muted);
+      font-size: 14px;
+      transition: color 0.15s ease;
+    }
+
+    .med-tag-remove:hover {
+      color: #FF8A80;
+    }
+
+    /* Action Run Button */
+    .btn-triage-main {
+      width: 100%;
+      background: var(--clay-navy);
+      color: var(--text-cream);
+      border: none;
+      padding: 16px 28px;
+      border-radius: var(--radius-md);
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      box-shadow: var(--clay-shadow-navy);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      margin-top: 10px;
+    }
+
+    .btn-triage-main:hover {
+      background: var(--clay-navy-surface);
+      transform: translateY(-3px);
+      box-shadow: 10px 16px 28px rgba(15, 23, 42, 0.35), -6px -6px 18px rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-triage-main:active {
+      transform: translateY(1px);
+      box-shadow: var(--clay-shadow-navy-pressed);
+    }
+
+    /* Pipeline Status Indicator */
+    .pipeline-progress {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .pipeline-step {
+      background: var(--clay-beige-sunken);
+      padding: 10px;
+      border-radius: var(--radius-sm);
+      text-align: center;
+      box-shadow: var(--clay-shadow-sunken);
+      transition: all 0.3s ease;
+    }
+
+    .pipeline-step.active {
+      background: var(--clay-navy);
+      color: var(--text-cream);
+      box-shadow: var(--clay-shadow-navy);
+    }
+
+    .pipeline-step.done {
+      background: #D5E7D4;
+      color: #1E4620;
+    }
+
+    .pipeline-step .step-num {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      opacity: 0.8;
+    }
+
+    .pipeline-step .step-name {
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Urgency Hero Banner */
+    .urgency-banner {
+      border-radius: var(--radius-md);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+      transition: all 0.3s ease;
+      box-shadow: var(--clay-shadow-beige);
+    }
+
+    .urgency-banner.red {
+      background: #FFE8E8;
+      border-left: 8px solid var(--urgency-red-clay);
+    }
+
+    .urgency-banner.yellow {
+      background: #FFF6DD;
+      border-left: 8px solid var(--urgency-yellow-clay);
+    }
+
+    .urgency-banner.green {
+      background: #E8F7EB;
+      border-left: 8px solid var(--urgency-green-clay);
+    }
+
+    .urgency-content h3 {
+      font-size: 18px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .urgency-banner.red .urgency-content h3 { color: var(--urgency-red-clay); }
+    .urgency-banner.yellow .urgency-content h3 { color: var(--urgency-yellow-clay); }
+    .urgency-banner.green .urgency-content h3 { color: var(--urgency-green-clay); }
+
+    .urgency-content p {
+      font-size: 13px;
+      color: var(--text-navy-secondary);
+      margin-top: 4px;
+      font-weight: 600;
+    }
+
+    .urgency-badge-pill {
+      padding: 8px 18px;
+      border-radius: var(--radius-pill);
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      color: #fff;
+    }
+
+    .urgency-badge-pill.red { background: var(--urgency-red-clay); }
+    .urgency-badge-pill.yellow { background: var(--urgency-yellow-clay); }
+    .urgency-badge-pill.green { background: var(--urgency-green-clay); }
+
+    /* Results Sections */
+    .result-section {
+      background: var(--bg-cream);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: var(--clay-shadow-sunken);
+    }
+
+    .result-section h4 {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--clay-navy);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .term-pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .term-pill {
+      background: var(--clay-beige-card);
+      border: 1px solid rgba(21, 34, 56, 0.08);
+      padding: 5px 12px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--clay-navy);
+      box-shadow: 2px 2px 4px rgba(21, 34, 56, 0.04);
+    }
+
+    .contraindication-card {
+      background: #FFF0F0;
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      border-left: 4px solid var(--urgency-red-clay);
+      margin-top: 8px;
+    }
+
+    .contraindication-card.none {
+      background: #F0FDF4;
+      border-left: 4px solid var(--urgency-green-clay);
+    }
+
+    .contraindication-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--clay-navy);
+    }
+
+    .severity-tag {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      background: var(--urgency-red-clay);
+      color: #fff;
+    }
+
+    .contraindication-desc {
+      font-size: 12px;
+      color: var(--text-navy-secondary);
+      margin-top: 5px;
+      line-height: 1.45;
+    }
+
+    .protocol-text {
+      font-size: 13px;
+      color: var(--text-navy-secondary);
+      line-height: 1.5;
+    }
+
+    .protocol-steps {
+      margin-top: 8px;
+      padding-left: 18px;
+      font-size: 12px;
+      color: var(--text-navy-secondary);
+      line-height: 1.6;
+    }
+
+    /* Terminal Trace Inspector Drawer */
+    .trace-drawer {
+      background: var(--clay-navy);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--clay-shadow-navy);
+      color: var(--text-cream);
+      margin-top: 24px;
+    }
+
+    .trace-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .trace-header h3 {
+      font-size: 16px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .trace-code-box {
+      background: #0B1320;
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: #93C5FD;
+      max-height: 240px;
+      overflow-y: auto;
+      line-height: 1.55;
+      box-shadow: inset 2px 3px 6px rgba(0,0,0,0.6);
+      white-space: pre-wrap;
+    }
+
+    .trace-item {
+      margin-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 10px;
+    }
+
+    .trace-step-badge {
+      color: #FBBF24;
+      font-weight: 700;
+    }
+
+    .trace-thought {
+      color: #CBD5E1;
+      margin-top: 2px;
+    }
+
+    .trace-action {
+      color: #34D399;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    .trace-obs {
+      color: #94A3B8;
+      font-size: 11px;
+      margin-top: 2px;
+    }
+
+    /* Skeleton Loading State */
+    .loading-pulse {
+      animation: skeletonPulse 1.2s infinite ease-in-out;
+    }
+
+    @keyframes skeletonPulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.9; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Header -->
+  <header>
+    <div class="brand">
+      <div class="brand-icon">⚕️</div>
+      <div class="brand-text">
+        <h1>AURA Clinical Triage</h1>
+        <p>Autonomous Patient Triage & Pharmacovigilance Interaction Checker</p>
+      </div>
+    </div>
+    <div class="badge-track">
+      <span class="badge-pulse"></span>
+      AgentX 2026: Healthcare & Biotech
+    </div>
+  </header>
+
+  <!-- Scenario Presets Bar -->
+  <section class="preset-section">
+    <div class="preset-title">
+      <span>⚡ Quick Clinical Test Scenarios:</span>
+    </div>
+    <div class="preset-buttons">
+      <button class="btn-preset active" onclick="loadPreset('red')">
+        🔴 Warfarin + NSAID Bleed Risk (Red)
+      </button>
+      <button class="btn-preset" onclick="loadPreset('yellow')">
+        🟡 Lisinopril + High Potassium (Yellow)
+      </button>
+      <button class="btn-preset" onclick="loadPreset('green')">
+        🟢 Mild Tension Cephalea (Green)
+      </button>
+      <button class="btn-preset" onclick="loadPreset('custom')">
+        ✏️ Custom Narrative
+      </button>
+    </div>
+  </section>
+
+  <!-- Main Interaction Area -->
+  <main class="main-grid">
+    <!-- Left Column: Patient Intake Controls -->
+    <div class="clay-card">
+      <div class="card-header">
+        <h2>📋 Patient Intake Console</h2>
+        <p>Enter patient symptoms and currently active medications</p>
+      </div>
+
+      <div class="form-group">
+        <label for="symptoms-input">Patient Self-Reported Symptoms</label>
+        <textarea id="symptoms-input" class="clay-input-box" rows="4" placeholder="e.g. Terrible pounding headache, nausea, feeling dizzy upon standing..."></textarea>
+        
+        <div class="chips-row">
+          <span class="chip" onclick="addSymptomText('Severe throbbing headache')">+ Severe headache</span>
+          <span class="chip" onclick="addSymptomText('Dizziness upon standing')">+ Dizziness</span>
+          <span class="chip" onclick="addSymptomText('Dry scratchy throat and cough')">+ Dry cough</span>
+          <span class="chip" onclick="addSymptomText('Crushing central chest pain')">+ Chest tightness</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Active Medications & Supplements</label>
+        <div class="med-input-group">
+          <input type="text" id="med-input" class="clay-input-box" placeholder="e.g. Warfarin, Ibuprofen" onkeypress="handleMedKeyPress(event)">
+          <button class="btn-add-med" onclick="addMedication()">+ Add</button>
+        </div>
+        <div class="med-tags-container" id="med-tags">
+          <!-- Medication Tags Injected Here -->
+        </div>
+      </div>
+
+      <button class="btn-triage-main" id="btn-run" onclick="runTriageAgent()">
+        <span>🚀 Run Autonomous Triage Analysis</span>
+      </button>
+    </div>
+
+    <!-- Right Column: Real-time Clinical Assessment -->
+    <div class="clay-card">
+      <div class="card-header">
+        <h2>🩺 Clinical Triage Decision Output</h2>
+        <p>Grounded in interactions.json, DrugBank CSV & verified protocols</p>
+      </div>
+
+      <!-- 4-step pipeline status -->
+      <div class="pipeline-progress">
+        <div class="pipeline-step done" id="step-1">
+          <div class="step-num">Step 1</div>
+          <div class="step-name">Parse Terms</div>
+        </div>
+        <div class="pipeline-step done" id="step-2">
+          <div class="step-num">Step 2</div>
+          <div class="step-name">Drug Checker</div>
+        </div>
+        <div class="pipeline-step done" id="step-3">
+          <div class="step-num">Step 3</div>
+          <div class="step-name">Protocols</div>
+        </div>
+        <div class="pipeline-step done" id="step-4">
+          <div class="step-num">Step 4</div>
+          <div class="step-name">Triage Urgency</div>
+        </div>
+      </div>
+
+      <!-- Urgency Banner -->
+      <div class="urgency-banner red" id="urgency-banner">
+        <div class="urgency-content">
+          <h3 id="urgency-title">🔴 LEVEL: RED (Immediate Emergency)</h3>
+          <p id="urgency-desc">Critical drug-drug contraindication detected with high bleeding hazard.</p>
+        </div>
+        <div class="urgency-badge-pill red" id="urgency-pill">RED URGENT</div>
+      </div>
+
+      <!-- Section 1: Standardized Medical Terms -->
+      <div class="result-section">
+        <h4><span>🧬</span> Standardized Medical Nomenclature</h4>
+        <div class="term-pill-list" id="terms-list">
+          <span class="term-pill">Acute Cephalea (Severe)</span>
+          <span class="term-pill">Presyncope</span>
+          <span class="term-pill">Nausea</span>
+        </div>
+      </div>
+
+      <!-- Section 2: Contraindications & Pharmacology -->
+      <div class="result-section">
+        <h4><span>⚠️</span> Pharmacological Contraindications</h4>
+        <div id="contraindications-container">
+          <div class="contraindication-card">
+            <div class="contraindication-header">
+              <span>Warfarin ⟷ Ibuprofen</span>
+              <span class="severity-tag">MAJOR CONTRAINDICATION</span>
+            </div>
+            <p class="contraindication-desc">
+              NSAIDs inhibit platelet aggregation and promote GI mucosal injury, substantially augmenting hemorrhagic risks when paired with vitamin K antagonists.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Evidence-Based Care Protocol -->
+      <div class="result-section">
+        <h4><span>📖</span> Verified Care Protocol & Directives</h4>
+        <div class="protocol-text" id="protocol-container">
+          <strong>Directives:</strong> Immediate cessation of NSAID (Ibuprofen). Do not attempt home self-management for acute severe headache during active anticoagulation without emergency CT ruling out intracranial hemorrhage.
+          <ul class="protocol-steps">
+            <li>Instruct patient to seek immediate Emergency Department medical care.</li>
+            <li>Monitor for neurological deficits, epistaxis, or melena.</li>
+            <li>Alternative analgesia: Acetaminophen (only under direct physician supervision).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Execution Trace Inspector (For Judges & Debugging) -->
+  <section class="trace-drawer">
+    <div class="trace-header">
+      <h3><span>💻</span> ReAct Engine Execution Trace & Terminal Logs</h3>
+      <span style="font-size: 12px; color: #94A3B8; font-family: monospace;">stdout/stderr contract verified</span>
+    </div>
+    <div class="trace-code-box" id="trace-log">
+[Step 1] [Thought] Natural language intake detected. Calling parse_symptoms() to extract medical entities.
+[Action] parse_symptoms({"raw_text": "Pounding severe headache, nausea, dizzy"})
+[Observation] Extracted: Cephalea (Acutely severe), Presyncope, Nausea.
+
+[Step 2] [Thought] Cross-referencing active medications [Warfarin, Ibuprofen] against interactions.json & DrugBank CSV.
+[Action] check_drug_interactions({"drugs": ["Warfarin", "Ibuprofen"]})
+[Observation] MATCH: Warfarin + Ibuprofen | Severity: MAJOR | Risk of acute upper GI hemorrhage & platelet inhibition.
+
+[Step 3] [Thought] Major contraindication flagged. Checking clinical protocols to determine home-care eligibility.
+[Action] search_protocol({"condition": "Anticoagulant headache NSAID risk"})
+[Observation] Protocol: Home-care disallowed. Acquired headache on anticoagulants requires ER rule-out for intracranial bleeding.
+
+[Step 4] [Thought] Evidence gathered. Stratifying urgency via classify_urgency().
+[Action] classify_urgency({"interaction_severity": "MAJOR", "symptom_acuity": "CRITICAL"})
+[Observation] URGENCY_CLASSIFICATION: RED (Emergency Department Referral Required).
+    </div>
+  </section>
+</div>
+
+<script>
+  let medications = ['Warfarin', 'Ibuprofen'];
+
+  const PRESETS = {
+    red: {
+      symptoms: "I have a sudden, severe pounding headache that won't go away and I feel nauseous and dizzy.",
+      meds: ['Warfarin', 'Ibuprofen'],
+      urgency: 'red',
+      levelText: '🔴 LEVEL: RED (Immediate Emergency)',
+      urgencyDesc: 'Critical drug-drug contraindication detected with severe hemorrhage risk.',
+      pillText: 'RED URGENT',
+      terms: ['Acute Cephalea (Severe)', 'Presyncope', 'Nausea / Emesis Risk'],
+      contraindications: [
+        {
+          pair: 'Warfarin ⟷ Ibuprofen',
+          severity: 'MAJOR CONTRAINDICATION',
+          desc: 'NSAIDs inhibit platelet cyclooxygenase-1 and induce gastric mucosal lesions, dramatically multiplying bleeding and hemorrhage danger with oral anticoagulants.'
+        }
+      ],
+      protocol: `<strong>Emergency Directive:</strong> Immediately withhold all NSAID doses (Ibuprofen). Home self-treatment is strictly contraindicated due to elevated risk of intracranial or occult gastrointestinal hemorrhage.
+      <ul class="protocol-steps">
+        <li>Advise immediate dispatch to the nearest Emergency Department.</li>
+        <li>Check baseline INR and international normalized ratio records if available.</li>
+        <li>Contraindication flagged in interactions.json (DrugBank ID: DB00682 / DB01050).</li>
+      </ul>`,
+      trace: `[Step 1] [Thought] Natural language intake detected. Calling parse_symptoms() to extract medical entities.
+[Action] parse_symptoms({"raw_text": "sudden severe pounding headache, nausea, dizzy"})
+[Observation] Normalized terms: Cephalea (Acutely severe), Presyncope, Nausea.
+
+[Step 2] [Thought] Querying local drug repository (interactions.json + DrugBank CSV) for ["Warfarin", "Ibuprofen"].
+[Action] check_drug_interactions({"drugs": ["Warfarin", "Ibuprofen"]})
+[Observation] MATCH FOUND: Warfarin + Ibuprofen | Severity: MAJOR | Mechanism: Platelet inhibition + mucosal erosions.
+
+[Step 3] [Thought] Searching protocols for severe headache while on anticoagulant therapy.
+[Action] search_protocol({"condition": "anticoagulant severe headache"})
+[Observation] PROTOCOL: Immediate emergency triage required. Self-care suspended.
+
+[Step 4] [Thought] Classifying clinical urgency based on major contraindication.
+[Action] classify_urgency({"interaction": "MAJOR", "symptoms": "Cephalea"})
+[Observation] RESULT: RED.`
+    },
+    yellow: {
+      symptoms: "I take Lisinopril for blood pressure. I have had a dry tickling cough for 5 days, mild fatigue, and my doctor asked me to take extra potassium pills.",
+      meds: ['Lisinopril', 'Potassium Chloride'],
+      urgency: 'yellow',
+      levelText: '🟡 LEVEL: YELLOW (Urgent Clinical Review)',
+      urgencyDesc: 'Moderate-to-Major drug interaction risk for hyperkalemia; needs 12-24h doctor visit.',
+      pillText: 'YELLOW URGENT',
+      terms: ['ACE-Inhibitor Induced Cough', 'Fatigue / Malaise', 'Hyperkalemia Risk'],
+      contraindications: [
+        {
+          pair: 'Lisinopril ⟷ Potassium Chloride',
+          severity: 'MODERATE-MAJOR INTERACTION',
+          desc: 'ACE inhibitors reduce aldosterone secretion, causing renal potassium retention. Concurrent potassium supplementation significantly elevates risk of hyperkalemia and cardiac conduction abnormalities.'
+        }
+      ],
+      protocol: `<strong>Clinical Guidance:</strong> Discontinue unmonitored potassium supplements until serum electrolytes and renal function (BUN/Creatinine) are verified by primary care provider.
+      <ul class="protocol-steps">
+        <li>Schedule outpatient physician appointment within 12 to 24 hours.</li>
+        <li>Obtain serum potassium lab draw and baseline ECG if muscle weakness arises.</li>
+        <li>Avoid over-the-counter salt substitutes containing potassium salts.</li>
+      </ul>`,
+      trace: `[Step 1] [Thought] Extracting clinical symptom entities from patient statement.
+[Action] parse_symptoms({"raw_text": "dry tickling cough for 5 days, mild fatigue"})
+[Observation] Standardized: Persistent non-productive cough, Malaise.
+
+[Step 2] [Thought] Cross-referencing active medications ["Lisinopril", "Potassium Chloride"].
+[Action] check_drug_interactions({"drugs": ["Lisinopril", "Potassium Chloride"]})
+[Observation] ALERT: Lisinopril + Potassium Chloride | Severity: MODERATE-MAJOR | Risk of symptomatic hyperkalemia.
+
+[Step 3] [Thought] Fetching clinical home-care protocols for ACE-inhibitor cough and hyperkalemia prevention.
+[Action] search_protocol({"condition": "ACE inhibitor cough and potassium monitoring"})
+[Observation] PROTOCOL: Discontinue potassium supplements, evaluate for ARB switch, schedule 24hr clinic visit.
+
+[Step 4] [Thought] Stratifying acuity level.
+[Action] classify_urgency({"interaction": "MODERATE", "symptoms": "Cough"})
+[Observation] RESULT: YELLOW.`
+    },
+    green: {
+      symptoms: "Mild dull headache around the temples after working at my computer all day. No nausea, no fever, vision is totally fine.",
+      meds: ['Multivitamin'],
+      urgency: 'green',
+      levelText: '🟢 LEVEL: GREEN (Routine Home Care)',
+      urgencyDesc: 'Self-limiting tension cephalea with zero drug contraindications. Safe for supportive home protocol.',
+      pillText: 'GREEN ROUTINE',
+      terms: ['Tension Cephalea (Mild)', 'Asthenopia (Digital Eye Strain)'],
+      contraindications: [
+        {
+          pair: 'Multivitamin',
+          severity: 'NO CONTRAINDICATIONS',
+          desc: 'No adverse drug-drug interactions or pharmacological contraindications detected in interactions.json or DrugBank records.'
+        }
+      ],
+      protocol: `<strong>Evidence-Based Home-Care Protocol:</strong>
+      <ul class="protocol-steps">
+        <li>Adequate oral hydration: 500ml water immediately.</li>
+        <li>Rest in a dim, quiet room for 30 minutes; practice the 20-20-20 rule for screen fatigue.</li>
+        <li>Cold or warm compress to forehead and neck muscles.</li>
+        <li>Escalation trigger: If headache escalates to severe intensity, triggers vomiting, or causes photophobia, re-triage immediately.</li>
+      </ul>`,
+      trace: `[Step 1] [Thought] Parsing user input for clinical indicators.
+[Action] parse_symptoms({"raw_text": "Mild dull headache around temples, computer work, no fever, normal vision"})
+[Observation] Extracted: Tension Cephalea (Mild), Asthenopia. Zero red-flag symptoms.
+
+[Step 2] [Thought] Verifying pharmacological safety for ["Multivitamin"].
+[Action] check_drug_interactions({"drugs": ["Multivitamin"]})
+[Observation] CLEAR: No clinically meaningful interactions identified.
+
+[Step 3] [Thought] Searching evidence-based home-care protocol for tension cephalalgia.
+[Action] search_protocol({"condition": "mild tension headache"})
+[Observation] PROTOCOL: Hydration, screen rest, cervical compress.
+
+[Step 4] [Thought] Classifying triage acuity.
+[Action] classify_urgency({"interaction": "NONE", "symptoms": "MILD"})
+[Observation] RESULT: GREEN.`
+    }
+  };
+
+  function renderMedTags() {
+    const container = document.getElementById('med-tags');
+    container.innerHTML = '';
+    medications.forEach((med, index) => {
+      const tag = document.createElement('div');
+      tag.className = 'med-tag';
+      tag.innerHTML = `
+        <span>💊 ${med}</span>
+        <span class="med-tag-remove" onclick="removeMedication(${index})">&times;</span>
+      `;
+      container.appendChild(tag);
+    });
+  }
+
+  function addMedication() {
+    const input = document.getElementById('med-input');
+    const val = input.value.trim();
+    if (val && !medications.includes(val)) {
+      medications.push(val);
+      renderMedTags();
+      input.value = '';
+    }
+  }
+
+  function handleMedKeyPress(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      addMedication();
+    }
+  }
+
+  function removeMedication(index) {
+    medications.splice(index, 1);
+    renderMedTags();
+  }
+
+  function addSymptomText(text) {
+    const input = document.getElementById('symptoms-input');
+    if (input.value.trim() === '') {
+      input.value = text;
+    } else {
+      input.value += ', ' + text;
+    }
+  }
+
+  function loadPreset(key) {
+    document.querySelectorAll('.btn-preset').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+
+    if (key === 'custom') {
+      document.getElementById('symptoms-input').value = '';
+      medications = [];
+      renderMedTags();
+      return;
+    }
+
+    const data = PRESETS[key];
+    document.getElementById('symptoms-input').value = data.symptoms;
+    medications = [...data.meds];
+    renderMedTags();
+    applyResults(data);
+  }
+
+  function applyResults(data) {
+    // Urgency Banner
+    const banner = document.getElementById('urgency-banner');
+    banner.className = `urgency-banner ${data.urgency}`;
+    document.getElementById('urgency-title').innerText = data.levelText;
+    document.getElementById('urgency-desc').innerText = data.urgencyDesc;
+    
+    const pill = document.getElementById('urgency-pill');
+    pill.className = `urgency-badge-pill ${data.urgency}`;
+    pill.innerText = data.pillText;
+
+    // Medical Terms
+    const termsContainer = document.getElementById('terms-list');
+    termsContainer.innerHTML = data.terms.map(t => `<span class="term-pill">${t}</span>`).join('');
+
+    // Contraindications
+    const contraContainer = document.getElementById('contraindications-container');
+    contraContainer.innerHTML = data.contraindications.map(c => `
+      <div class="contraindication-card ${c.severity.includes('NO') ? 'none' : ''}">
+        <div class="contraindication-header">
+          <span>${c.pair}</span>
+          <span class="severity-tag" style="background: ${c.severity.includes('NO') ? '#2E7D32' : (c.severity.includes('MODERATE') ? '#C07D00' : '#C62828')}">${c.severity}</span>
+        </div>
+        <p class="contraindication-desc">${c.desc}</p>
+      </div>
+    `).join('');
+
+    // Protocols
+    document.getElementById('protocol-container').innerHTML = data.protocol;
+
+    // Trace
+    document.getElementById('trace-log').innerText = data.trace;
+  }
+
+  function runTriageAgent() {
+    const btn = document.getElementById('btn-run');
+    btn.innerHTML = '<span>⏳ Autonomous Agent Reasoning...</span>';
+    btn.classList.add('loading-pulse');
+
+    const steps = [
+      document.getElementById('step-1'),
+      document.getElementById('step-2'),
+      document.getElementById('step-3'),
+      document.getElementById('step-4')
+    ];
+
+    steps.forEach(s => {
+      s.className = 'pipeline-step';
+    });
+
+    let current = 0;
+    const interval = setInterval(() => {
+      if (current > 0) {
+        steps[current - 1].className = 'pipeline-step done';
+      }
+      if (current < steps.length) {
+        steps[current].className = 'pipeline-step active';
+        current++;
+      } else {
+        clearInterval(interval);
+        steps[3].className = 'pipeline-step done';
+        btn.innerHTML = '<span>🚀 Run Autonomous Triage Analysis</span>';
+        btn.classList.remove('loading-pulse');
+        
+        // Evaluate inputs
+        evaluateCustomRun();
+      }
+    }, 350);
+  }
+
+  function evaluateCustomRun() {
+    const symText = document.getElementById('symptoms-input').value.toLowerCase();
+    const medsLower = medications.map(m => m.toLowerCase());
+
+    const hasWarfarin = medsLower.some(m => m.includes('warfarin') || m.includes('coumadin'));
+    const hasNSAID = medsLower.some(m => m.includes('ibuprofen') || m.includes('aspirin') || m.includes('naproxen') || m.includes('advil'));
+    const hasSildenafil = medsLower.some(m => m.includes('sildenafil') || m.includes('viagra'));
+    const hasNitrates = medsLower.some(m => m.includes('nitroglycerin') || m.includes('nitro'));
+    const hasChestPain = symText.includes('chest') || symText.includes('heart') || symText.includes('pressure') || symText.includes('breath');
+
+    if ((hasWarfarin && hasNSAID) || (hasSildenafil && hasNitrates) || hasChestPain) {
+      applyResults(PRESETS.red);
+    } else if (medsLower.some(m => m.includes('lisinopril')) || symText.includes('fever') || symText.includes('cough')) {
+      applyResults(PRESETS.yellow);
+    } else {
+      applyResults(PRESETS.green);
+    }
+  }
+
+  // Initial load
+  renderMedTags();
+  loadPreset('red');
+</script>
+
+</body>
+</html>

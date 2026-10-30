@@ -1,0 +1,122 @@
+[
+  {
+    "drug_a": "Warfarin",
+    "drug_b": "Ibuprofen",
+    "aliases_a": ["Coumadin", "Jantoven"],
+    "aliases_b": ["Advil", "Motrin", "Nurofen"],
+    "severity": "MAJOR",
+    "urgency": "RED",
+    "mechanism": "NSAIDs competitively inhibit platelet cyclooxygenase-1 (COX-1), blocking thromboxane A2 synthesis and causing gastric mucosal erosions. When combined with oral vitamin K antagonists (Warfarin), it dramatically elevates the risk of severe gastrointestinal hemorrhage, systemic bleeding, and occult hematoma.",
+    "clinical_risk": "Acute upper gastrointestinal hemorrhage, intracranial hemorrhage, uncontrolled systemic bleeding.",
+    "recommendation": "Avoid combination. Withhold Ibuprofen immediately. Consider Acetaminophen (maximum 2g/day) under strict medical supervision if analgesia is required and INR is stable.",
+    "symptom_warnings": ["Severe headache", "Dizziness", "Black/tarry stools (Melena)", "Easy bruising", "Epistaxis"]
+  },
+  {
+    "drug_a": "Sildenafil",
+    "drug_b": "Nitroglycerin",
+    "aliases_a": ["Viagra", "Revatio"],
+    "aliases_b": ["Nitrostat", "Nitro-Dur", "Nitrolingual"],
+    "severity": "CONTRAINDICATED",
+    "urgency": "RED",
+    "mechanism": "PDE5 inhibitors (Sildenafil) impair the degradation of cyclic GMP (cGMP). Nitrates (Nitroglycerin) stimulate guanylate cyclase to increase cGMP production. The synergistic elevation in cGMP causes profound, intractable systemic vasodilation and catastrophic hypotension.",
+    "clinical_risk": "Profound hypotension, syncope, myocardial infarction, and fatal cardiovascular collapse.",
+    "recommendation": "Absolute clinical contraindication. Under no circumstances should Nitrates and PDE5 inhibitors be co-administered within 24-48 hours. If taken concomitantly with chest pain, immediate emergency EMS dispatch is mandatory.",
+    "symptom_warnings": ["Crushing chest tightness", "Syncope", "Severe dizziness", "Cold diaphoresis"]
+  },
+  {
+    "drug_a": "Lisinopril",
+    "drug_b": "Potassium Chloride",
+    "aliases_a": ["Prinivil", "Zestril"],
+    "aliases_b": ["K-Dur", "Klor-Con", "Micro-K"],
+    "severity": "MAJOR",
+    "urgency": "YELLOW",
+    "mechanism": "Angiotensin-Converting Enzyme (ACE) inhibitors suppress angiotensin II synthesis, decreasing adrenal aldosterone release and causing renal potassium retention. Concomitant administration of exogenous potassium supplements impairs renal clearance of potassium.",
+    "clinical_risk": "Severe hyperkalemia (serum K+ > 5.5 mEq/L), cardiac conduction abnormalities, arrhythmias, and flaccid muscle weakness.",
+    "recommendation": "Withhold unmonitored potassium supplementation. Check serum electrolytes (basic metabolic panel) and renal function within 12-24 hours. Monitor for paresthesias or cardiac palpitations.",
+    "symptom_warnings": ["Muscle weakness", "Palpitations", "Arrhythmia", "Numbness in extremities"]
+  },
+  {
+    "drug_a": "Sertraline",
+    "drug_b": "Phenelzine",
+    "aliases_a": ["Zoloft"],
+    "aliases_b": ["Nardil"],
+    "severity": "CONTRAINDICATED",
+    "urgency": "RED",
+    "mechanism": "Co-administration of a Selective Serotonin Reuptake Inhibitor (SSRI) with a Monoamine Oxidase Inhibitor (MAOI) blocks serotonin reuptake while simultaneously inhibiting enzymatic deamination of serotonin, precipitating intrasynaptic serotonin toxicity.",
+    "clinical_risk": "Serotonin Syndrome (hyperthermia, autonomic instability, muscle rigidity, clonus, delirium, seizures, death).",
+    "recommendation": "Absolute contraindication. Requires a minimum 14-day washout period between MAOIs and SSRIs. If co-ingested, immediate emergency hospitalization for supportive care and cyproheptadine therapy is required.",
+    "symptom_warnings": ["High fever", "Agitation", "Tremors / Myoclonus", "Diaphoresis", "Dilated pupils"]
+  },
+  {
+    "drug_a": "Clopidogrel",
+    "drug_b": "Omeprazole",
+    "aliases_a": ["Plavix"],
+    "aliases_b": ["Prilosec"],
+    "severity": "MODERATE",
+    "urgency": "YELLOW",
+    "mechanism": "Omeprazole is a competitive inhibitor of CYP2C19. Clopidogrel is a prodrug requiring biotransformation via CYP2C19 into its active antiplatelet metabolite. Concomitant use reduces Clopidogrel active metabolite levels and impairs its antiplatelet efficacy.",
+    "clinical_risk": "Increased risk of stent thrombosis, recurrent ischemic stroke, and acute myocardial infarction.",
+    "recommendation": "Consider switching proton-pump inhibitor to Pantoprazole (Protonix) or an H2-receptor antagonist (Famotidine), which exert minimal inhibition on CYP2C19.",
+    "symptom_warnings": ["Chest discomfort", "Shortness of breath", "Dyspnea on exertion"]
+  },
+  {
+    "drug_a": "Metformin",
+    "drug_b": "Iodinated Contrast",
+    "aliases_a": ["Glucophage", "Fortamet"],
+    "aliases_b": ["Isovue", "Omnipaque"],
+    "severity": "MAJOR",
+    "urgency": "RED",
+    "mechanism": "Intravascular iodinated radiocontrast agents can cause acute contrast-induced nephropathy. In the setting of reduced renal clearance, Metformin accumulates in tissue, leading to inhibition of mitochondrial complex I and profound lactic acidosis.",
+    "clinical_risk": "Severe lactic acidosis (high anion-gap metabolic acidosis with high mortality), acute renal injury.",
+    "recommendation": "Withhold Metformin at or prior to the imaging procedure and for 48 hours afterward. Re-evaluate eGFR before resuming medication.",
+    "symptom_warnings": ["Somnolence", "Severe abdominal cramping", "Kussmaul breathing", "Severe weakness"]
+  },
+  {
+    "drug_a": "Simvastatin",
+    "drug_b": "Amiodarone",
+    "aliases_a": ["Zocor"],
+    "aliases_b": ["Pacerone", "Cordarone"],
+    "severity": "MAJOR",
+    "urgency": "YELLOW",
+    "mechanism": "Amiodarone inhibits hepatic CYP3A4-mediated oxidation of Simvastatin, causing up to a 2-fold elevation in systemic exposure of Simvastatin active acid.",
+    "clinical_risk": "Myopathy, rhabdomyolysis, myoglobinuria, and secondary acute tubular necrosis (acute renal failure).",
+    "recommendation": "Do not exceed Simvastatin 20 mg daily in patients taking Amiodarone, or switch to Rosuvastatin or Pravastatin which do not rely on CYP3A4.",
+    "symptom_warnings": ["Unexplained muscle aches", "Dark/tea-colored urine", "Generalized myalgia"]
+  },
+  {
+    "drug_a": "Ciprofloxacin",
+    "drug_b": "Theophylline",
+    "aliases_a": ["Cipro"],
+    "aliases_b": ["Theochron", "Theo-24"],
+    "severity": "MAJOR",
+    "urgency": "RED",
+    "mechanism": "Ciprofloxacin potent inhibitor of CYP1A2, which is responsible for >90% of Theophylline clearance. Concomitant use increases serum Theophylline levels by 2- to 3-fold, frequently into toxic ranges.",
+    "clinical_risk": "Theophylline toxicity, intractable cardiac arrhythmias, grand mal seizures, and circulatory collapse.",
+    "recommendation": "Avoid combination if possible. If required, reduce Theophylline dose by 50% and closely monitor serum levels.",
+    "symptom_warnings": ["Intractable nausea", "Vomiting", "Severe tremors", "Tachycardia", "Seizure activity"]
+  },
+  {
+    "drug_a": "Methotrexate",
+    "drug_b": "Aspirin",
+    "aliases_a": ["Trexall", "Rasuvo"],
+    "aliases_b": ["Bayer", "Bufferin"],
+    "severity": "MAJOR",
+    "urgency": "YELLOW",
+    "mechanism": "Salicylates displace Methotrexate from serum albumin binding sites and competitively inhibit renal organic anion transporter (OAT1/OAT3) secretion of Methotrexate.",
+    "clinical_risk": "Methotrexate bone marrow suppression, severe pancytopenia, hepatotoxicity, stomatitis.",
+    "recommendation": "Avoid concurrent high-dose salicylates. Use alternative non-interacting analgesics and monitor complete blood count (CBC).",
+    "symptom_warnings": ["Oral ulcers / Stomatitis", "Fever / Shivering", "Petechiae", "Extreme fatigue"]
+  },
+  {
+    "drug_a": "Digoxin",
+    "drug_b": "Clarithromycin",
+    "aliases_a": ["Lanoxin"],
+    "aliases_b": ["Biaxin"],
+    "severity": "MAJOR",
+    "urgency": "RED",
+    "mechanism": "Clarithromycin strongly inhibits P-glycoprotein (P-gp / ABCB1) efflux transporters in the intestinal wall and renal tubules, while simultaneously eradicating intestinal Eubacterium lentum that degrades Digoxin.",
+    "clinical_risk": "Digitalis toxicity: fatal ventricular arrhythmias, heart block, severe bradycardia, xanthopsia (yellow-green visual halos).",
+    "recommendation": "Avoid macrolides with strong P-gp inhibition or reduce Digoxin dose by 50% with frequent serum digoxin monitoring.",
+    "symptom_warnings": ["Yellow/green visual halos", "Profound nausea", "Confusion", "Extreme bradycardia"]
+  }
+]

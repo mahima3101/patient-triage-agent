@@ -1,0 +1,103 @@
+[
+  {
+    "condition": "Tension-Type Headache / Screen Asthenopia",
+    "icd10": "G44.2",
+    "snomed": "398057008",
+    "symptom_keywords": ["headache", "temple pain", "band-like pain", "dull ache", "eye strain", "screen fatigue"],
+    "home_care_measures": [
+      "Immediate oral hydration: Consume 500-750 mL of water.",
+      "Rest in a quiet, dark, well-ventilated room with eyes closed for 30-45 minutes.",
+      "Apply a cold damp washcloth or ice pack (wrapped in a towel) over forehead or warm compress to posterior neck muscles.",
+      "Practice the 20-20-20 visual rest rule (look at an object 20 feet away for 20 seconds every 20 minutes of screen use).",
+      "Gentle neck and shoulder stretching to relieve myofascial tension."
+    ],
+    "medication_guidance": "Acetaminophen (500-1000 mg oral every 6 hours as needed, max 3000 mg/day) ONLY IF no contraindication exists and liver function is normal. Verify with drug interaction checker before taking NSAIDs if patient takes anticoagulants or ACE inhibitors.",
+    "escalation_red_flags": [
+      "Sudden 'thunderclap' onset of worst headache of life (subarachnoid hemorrhage risk)",
+      "Accompanied by neck stiffness, high fever, or photophobia (meningitis triad)",
+      "Focal neurological deficits (facial droop, unilateral limb weakness, speech slurring)",
+      "Headache on anticoagulant therapy (Warfarin, NOACs) - Mandatory Emergency Department referral",
+      "Worsening pain despite conservative measures over 48 hours"
+    ],
+    "urgency_classification": "GREEN"
+  },
+  {
+    "condition": "Acute Viral Pharyngitis / Upper Respiratory Infection (Common Cold)",
+    "icd10": "J00",
+    "snomed": "82272006",
+    "symptom_keywords": ["sore throat", "scratchy throat", "mild cough", "rhinorrhea", "nasal congestion", "sneezing", "tickling throat"],
+    "home_care_measures": [
+      "Warm saline gargling: Dissolve 1/2 teaspoon of salt in 8 ounces of warm water; gargle 3-4 times daily.",
+      "Liberal oral fluid intake: Warm broths, herbal decaffeinated teas with honey, and electrolyte solutions.",
+      "Cool-mist humidifier in sleeping area to moisten inflamed respiratory mucosa.",
+      "Elevate head of bed 30 degrees during sleep to reduce post-nasal drip.",
+      "Throat lozenges containing pectin or glycerin for mucosal demulcent effect."
+    ],
+    "medication_guidance": "Honey (1-2 teaspoons for cough relief in patients > 1 year old). Saline nasal spray for congestion. Antipyretic analgesics if feverish and cleared by drug checker.",
+    "escalation_red_flags": [
+      "Inability to swallow saliva, drooling, or severe trismus (peritonsillar abscess / epiglottitis)",
+      "Inspiratory stridor, shortness of breath, or intercostal retractions",
+      "Persistent high fever > 39.0°C (102.2°F) refractory to antipyretics for > 72 hours",
+      "Hemoptysis (coughing up blood) or purulent sputum accompanied by pleuritic chest pain"
+    ],
+    "urgency_classification": "GREEN"
+  },
+  {
+    "condition": "Acute Uncomplicated Viral Gastroenteritis (Stomach Flu)",
+    "icd10": "A08.4",
+    "snomed": "235595009",
+    "symptom_keywords": ["nausea", "watery diarrhea", "mild vomiting", "stomach cramps", "upset stomach", "low-grade fever"],
+    "home_care_measures": [
+      "Oral Rehydration Therapy (ORT): Small, frequent sips (5-10 mL every 5 minutes) of oral rehydration salts (ORS), dilute broths, or electrolyte solutions.",
+      "Temporary gut rest: Avoid dairy, fatty foods, high-sugar beverages, alcohol, and caffeine for 24-48 hours.",
+      "Gradual dietary reintroduction: BRAT diet (Bananas, Rice, Applesauce, Toast) once vomiting has subsided for > 6 hours.",
+      "Strict hand hygiene with soap and water to limit enterovirus/norovirus transmission."
+    ],
+    "medication_guidance": "Avoid antimotility agents (Loperamide) if high fever or bloody stools are present. Review all chronic medications (especially diuretics, ACE inhibitors, and Metformin) to prevent hypovolemia-induced renal injury.",
+    "escalation_red_flags": [
+      "Signs of severe dehydration: Anuria (no urination > 8 hours), sunken eyes, dry mucous membranes, postural syncope",
+      "Hematemesis (coffee-ground emesis) or frank hematochezia (bloody stools)",
+      "Severe localized abdominal rigidity or peritoneal rebound tenderness",
+      "Intractable vomiting preventing oral fluid intake for > 12 hours"
+    ],
+    "urgency_classification": "GREEN"
+  },
+  {
+    "condition": "Mild Allergic Rhinitis",
+    "icd10": "J30.9",
+    "snomed": "61582004",
+    "symptom_keywords": ["itchy eyes", "watery eyes", "clear rhinorrhea", "sneezing", "nasal pruritus", "post-nasal drip"],
+    "home_care_measures": [
+      "Allergen avoidance: Keep windows closed during high pollen counts; shower and change clothes after outdoor exposure.",
+      "Nasal saline irrigation (Neti pot) with distilled or sterile saline twice daily.",
+      "Cold compress over eyes to soothe allergic conjunctival pruritus."
+    ],
+    "medication_guidance": "Intranasal corticosteroid spray (Fluticasone) or non-sedating second-generation oral antihistamine (Cetirizine, Loratadine). Verify patient does not take medications that prolong QTc or interact with antihistamines.",
+    "escalation_red_flags": [
+      "Facial, lip, or tongue angioedema",
+      "Wheezing, chest tightness, or respiratory compromise (Anaphylaxis risk - Call EMS / 911)",
+      "Unilateral foul-smelling nasal discharge with facial pressure (bacterial sinusitis / obstruction)"
+    ],
+    "urgency_classification": "GREEN"
+  },
+  {
+    "condition": "Acute Lumbosacral Muscle Strain (Mild Back Strain)",
+    "icd10": "M54.5",
+    "snomed": "203107001",
+    "symptom_keywords": ["lower back ache", "muscle spasm back", "back stiffness", "strain after lifting"],
+    "home_care_measures": [
+      "Avoid prolonged complete bed rest; maintain gentle, pain-free active movement and short walks.",
+      "Apply ice pack wrapped in cloth for 15-20 minutes every 2-3 hours during the initial 48 hours; transition to moist heat thereafter.",
+      "Sleeping posture: Side sleeping with pillow between knees or back sleeping with pillow under knees to reduce lumbar lordotic stress.",
+      "Ergonomic lumbar support while sitting."
+    ],
+    "medication_guidance": "Topical menthol or lidocaine patches. Oral analgesics if cleared by drug interaction checker (caution with NSAIDs in renal disease, hypertension, or anticoagulation).",
+    "escalation_red_flags": [
+      "Cauda Equina Syndrome: Sudden loss of bowel or bladder sphincter control, saddle anesthesia (loss of sensation in perineum/buttocks)",
+      "Progressive lower extremity neurological deficit (foot drop, loss of leg motor power)",
+      "History of malignancy or unexplained weight loss",
+      "Back pain accompanied by unexplained high fever"
+    ],
+    "urgency_classification": "GREEN"
+  }
+]

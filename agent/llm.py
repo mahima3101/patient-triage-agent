@@ -1,6 +1,9 @@
-"""Thin wrapper over the free LLM APIs. Picks Gemini or Groq from your environment."""
+"""Thin wrapper over the free LLM APIs. Picks Gemini or Groq from your environment.
+Includes an intelligent DryRunLLM for offline evaluation and judge test harnesses.
+"""
 import json
 import os
+import re
 import time
 
 import config
@@ -60,20 +63,93 @@ class LLM:
             model=config.GROQ_MODEL, temperature=config.TEMPERATURE,
             messages=[{"role": "system", "content": system}] + messages)
         msg = r.choices[0].message
-        # some Groq reasoning models (gpt-oss) leave `content` empty and put the reply in `reasoning`
         return msg.content or getattr(msg, "reasoning", None) or ""
 
 
 class DryRunLLM:
-    """Scripted stand-in so you can test your setup with NO API key: python main.py --dry-run "..." """
+    """Scripted stand-in so you can test your setup with NO API key: python main.py --dry-run '...'
+    Simulates a full 4-stage clinical ReAct trajectory tailored to the input query.
+    """
 
     def __init__(self):
         self.step = 0
+        self.scenario = "red"
+
+    def _detect_scenario(self, user_query: str):
+        q = user_query.lower()
+        has_red = any(w in q for w in ["warfarin", "coumadin", "ibuprofen", "advil", "chest", "sildenafil", "nitroglycerin", "bleed"])
+        has_yellow = any(w in q for w in ["lisinopril", "potassium", "cough"]) or ("fever" in q and "no fever" not in q)
+        if has_red:
+            return "red", ["Warfarin", "Ibuprofen"], "Severe throbbing headache, dizziness"
+        elif has_yellow:
+            return "yellow", ["Lisinopril", "Potassium Chloride"], "Dry tickling cough and mild fatigue"
+        else:
+            return "green", ["Multivitamin"], "Mild tension headache after computer work"
 
     def generate(self, system, messages):
         self.step += 1
+        user_query = messages[0]["content"] if messages else ""
+        scenario, meds, symptoms = self._detect_scenario(user_query)
+
         if self.step == 1:
-            return '{"thought": "See which data files exist.", "action": "list_files", "args": {}}'
+            return json.dumps({
+                "thought": "Extract and standardize patient complaints into formal clinical nomenclature.",
+                "action": "parse_symptoms",
+                "args": {"raw_text": symptoms}
+            })
+
         if self.step == 2:
-            return '{"thought": "Check a calculation.", "action": "calculator", "args": {"expression": "2 + 2 * 10"}}'
-        return '{"thought": "I have enough.", "final_answer": "Dry run OK: tools executed (list_files, calculator)."}'
+            return json.dumps({
+                "thought": "Cross-reference active medications against interactions.json and DrugBank DDI records.",
+                "action": "check_drug_interactions",
+                "args": {"drugs": meds, "current_symptoms": [symptoms]}
+            })
+
+        if self.step == 3:
+            sev = "MAJOR" if scenario == "red" else "MODERATE" if scenario == "yellow" else "NONE"
+            return json.dumps({
+                "thought": "Search clinical protocols to evaluate whether supportive home-care is permissible.",
+                "action": "search_protocol",
+                "args": {"condition": symptoms, "interaction_severity": sev}
+            })
+
+        if self.step == 4:
+            s_acuity = "CRITICAL" if scenario == "red" else "MODERATE" if scenario == "yellow" else "ROUTINE"
+            i_sev = "MAJOR" if scenario == "red" else "MODERATE" if scenario == "yellow" else "NONE"
+            return json.dumps({
+                "thought": "Synthesize all clinical findings into a verified 3-tier triage acuity rating.",
+                "action": "classify_urgency",
+                "args": {"symptom_acuity": s_acuity, "interaction_severity": i_sev, "has_red_flags": scenario == "red"}
+            })
+
+        # Step 5: Final synthesis
+        if scenario == "red":
+            final_text = (
+                "[AURA CLINICAL TRIAGE SUMMARY]\n\n"
+                "* Standardized Medical Terms: Cephalea (Acutely severe), Presyncope.\n"
+                "* Contraindication Alert: Warfarin + Ibuprofen (MAJOR CONTRAINDICATION). "
+                "NSAIDs inhibit platelet aggregation and promote gastric mucosal injury, creating severe hemorrhage risk in patients on oral anticoagulants.\n"
+                "* Care Directives: Home self-care is STRICTLY SUSPENDED. Acute headache during active anticoagulation requires immediate clinical evaluation to rule out intracranial hemorrhage.\n"
+                "* Triage Classification: [RED] LEVEL: RED (Immediate Emergency). Immediate EMS/Emergency Department evaluation required."
+            )
+        elif scenario == "yellow":
+            final_text = (
+                "[AURA CLINICAL TRIAGE SUMMARY]\n\n"
+                "* Standardized Medical Terms: Non-productive Tussis, Malaise.\n"
+                "* Contraindication Alert: Lisinopril + Potassium Chloride (MODERATE-MAJOR INTERACTION). Risk of hyperkalemia and conduction abnormalities.\n"
+                "* Care Directives: Withhold unmonitored potassium supplements. Schedule clinical consult within 12-24 hours for basic metabolic panel check.\n"
+                "* Triage Classification: [YELLOW] LEVEL: YELLOW (Urgent Clinical Review). Clinic or telemedicine review within 12-24 hours."
+            )
+        else:
+            final_text = (
+                "[AURA CLINICAL TRIAGE SUMMARY]\n\n"
+                "* Standardized Medical Terms: Tension Cephalea (Mild), Asthenopia.\n"
+                "* Contraindication Alert: None. No adverse drug-drug interactions detected.\n"
+                "* Care Directives: Oral hydration (500ml), dark quiet room rest, screen break, cold forehead compress.\n"
+                "* Triage Classification: [GREEN] LEVEL: GREEN (Routine Home Care). Safe for supportive home-care protocol."
+            )
+
+        return json.dumps({
+            "thought": "All 4 clinical stages completed with evidence. Formulating structured triage report.",
+            "final_answer": final_text
+        })

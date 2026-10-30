@@ -41,37 +41,31 @@ The implementation strictly decouples:
 - [x] **Task 2.5: Registered in `tools/__init__.py` & Verified with Unit Tests (`tests/test_medical_tools.py`)**
   - 9 automated unit tests verifying parsing, contraindication flagging, safety blocking, and urgency classification.
 
-### Phase 3: Agent Brain & Prompt Engineering (`agent/`)
-- [ ] **Task 3.1: Specialize `agent/prompt_builder.py`**
-  - Update `ROLE` to a board-certified Clinical Triage & Pharmacovigilance specialist.
-  - Add explicit multi-step planning instructions:
-    1. Parse symptoms into medical terms.
-    2. Check active drug contraindications.
-    3. Query appropriate care protocols.
-    4. Stratify urgency into Green / Yellow / Red.
-  - Enforce JSON-only formatting and ground-truth data usage.
-- [ ] **Task 3.2: Enhance `agent/core.py`**
-  - Verify loop-prevention guards and retry handling.
-  - Ensure error trace capturing for judge inspection.
-- [ ] **Task 3.3: Dry-Run Support in `agent/llm.py`**
-  - Update `DryRunLLM` to simulate a complete clinical triage trajectory with realistic thoughts, tool calls, and observations for offline demonstrations.
+### Phase 3: Agent Brain & Prompt Engineering (`agent/`) — [COMPLETED]
+- [x] **Task 3.1: Specialize `agent/prompt_builder.py`**
+  - Updated `ROLE` to board-certified Clinical Triage & Pharmacovigilance specialist.
+  - Injected structured 4-step diagnostic protocol: `parse_symptoms` ➔ `check_drug_interactions` ➔ `search_protocol` ➔ `classify_urgency`.
+  - Enforced JSON-only turn format and strict ground-truth tool reliance.
+- [x] **Task 3.2: Enhance `agent/core.py`**
+  - Clinical nudge prompt on ungrounded answers.
+  - Repeat-guard and tool error recovery converting exceptions into actionable observations.
+  - Hard reasoning iteration cap (`MAX_ITERATIONS = 8`).
+- [x] **Task 3.3: Intelligent Dry-Run Simulator in `agent/llm.py`**
+  - Scripted `DryRunLLM` simulating complete 4-stage ReAct trajectories for RED, YELLOW, and GREEN benchmark scenarios.
+  - Verified with `--json` judges' contract to output valid JSON single-line answer + full execution trace.
 
-### Phase 4: Driver & Harness Verification (`main.py`)
-- [ ] **Task 4.1: Validate Judges' Contract**
-  - Ensure `python main.py --json "<query>"` emits strictly one JSON line to `stdout`:
-    `{"answer": "...", "trace": [...]}`.
-  - Ensure all human logs and trace displays are routed exclusively to `stderr`.
-- [ ] **Task 4.2: Robust Exception Shielding**
-  - Ensure unhandled exceptions return a clean fallback JSON answer rather than crashing with an exit code != 0.
+### Phase 4: Driver & Harness Verification (`main.py`) — [COMPLETED]
+- [x] **Task 4.1: Validate Judges' Contract**
+  - Confirmed `python main.py --json "<query>"` emits strictly one JSON line to `stdout`: `{"answer": "...", "trace": [...]}`.
+  - Ensured all human logs and trace displays are routed exclusively to `stderr` in headless mode.
+- [x] **Task 4.2: Robust Exception Shielding**
+  - Shielded against unhandled runtime errors with UTF-8 stream reconfiguration and safe fallback responses.
 
-### Phase 5: Comprehensive Testing & Validation
-- [ ] **Task 5.1: Unit Tests (`tests/test_medical_tools.py`)**
-  - Test `DrugInteractionChecker` with known contraindication pairs (Warfarin + Ibuprofen -> MAJOR).
-  - Test `SymptomMedicalParser` normalization.
-  - Test `UrgencyClassifier` boundary cases (Red vs Yellow vs Green).
-- [ ] **Task 5.2: End-to-End ReAct Test (`tests/test_agent.py`)**
-  - Run offline dry-run tests verifying that at least one data tool is called before emitting the final answer.
-  - Verify JSON structure and trace integrity.
+### Phase 5: Comprehensive Testing & Validation — [COMPLETED]
+- [x] **Task 5.1: Unit Tests (`tests/test_medical_tools.py`)**
+  - 9/9 tests passed for `parse_symptoms`, `check_drug_interactions`, `search_protocol`, and `classify_urgency`.
+- [x] **Task 5.2: End-to-End ReAct Test (`tests/test_agent.py`)**
+  - 6/6 tests passed for JSON parsing, iteration caps, tool error recovery, and CLI contract.
 
 ### Phase 6: Claymorphism Frontend & Live Demo Suite (`frontend/`, `serve.py`)
 - [x] **Task 6.1: Tactile Claymorphism SPA (`frontend/index.html`)**

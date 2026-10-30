@@ -9,6 +9,18 @@ import json
 import os
 import sys
 
+# Ensure UTF-8 output on Windows consoles
+if hasattr(sys.stdout, "reconfigure"):
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+if hasattr(sys.stderr, "reconfigure"):
+    try:
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -37,7 +49,7 @@ def main():
     if a.json:
         print(json.dumps({"answer": answer, "trace": trace}))
     else:
-        print(f"\nANSWER: {answer}")
+        print(f"\nANSWER:\n{answer}")
 
 
 if __name__ == "__main__":
